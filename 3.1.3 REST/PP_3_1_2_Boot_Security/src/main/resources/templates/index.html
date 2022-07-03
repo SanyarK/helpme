@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Security Example</title>
+</head>
+<body>
+
+<div class="container">
+    <table class="table table-stripped">
+        <thread>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>lastName</th>
+                <th>age</th>
+                <th>email</th>
+            </tr>
+        </thread>
+        <tbody id="data">
+
+        </tbody>
+    </table>
+</div>
+
+<script>
+    fetch("http://localhost:8080/api/rest").then(
+        res => {
+            res.json().then(
+                data => {
+                    console.log(data);
+                    if(data.length > 0) {
+                        var temp = "";
+
+                        // star for loop
+
+                        data.forEach((u) => {
+                            temp += "<tr>";
+                            temp += "<td>"+u.id+"</td>";
+                            temp += "<td>"+u.name+"</td>";
+                            temp += "<td>"+u.lastName+"</td>";
+                            temp += "<td>"+u.age+"</td>";
+                            temp += "<td>"+u.email+"</td></tr>";
+                        })
+
+                        //close for loop
+
+                        document.getElementById("data").innerHTML = temp;
+                    }
+                }
+            )
+        }
+    )
+</script>
+</body>
+</html>

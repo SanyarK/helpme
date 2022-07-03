@@ -1,0 +1,730 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Admin panel</title>-->
+<!--&lt;!&ndash;    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"&ndash;&gt;-->
+<!--&lt;!&ndash;          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">&ndash;&gt;-->
+
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"-->
+<!--          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+<!--</head>-->
+<!--<body>-->
+
+<!--                    &lt;!&ndash;ШАПКА&ndash;&gt;-->
+
+<!--                    <div class="container-fluid">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-md-12">-->
+<!--                                <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-dark bg-dark static-top">-->
+
+<!--                                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">-->
+<!--                                        <a style="color: white;text-align: left;" id="headInfo">-->
+<!--                                        </a>-->
+<!--                                        <ul class="navbar-nav ml-md-auto">-->
+<!--                                            <li class="nav-item active">-->
+<!--                                                <a class="nav-link" href="/logout">Logout <span class="sr-only">(current)</span></a>-->
+<!--                                            </li>-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
+<!--                                </nav>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--&lt;!&ndash;                    ЛЕВЫЙ ПОВОРОТ&ndash;&gt;-->
+
+<!--<div class="row">-->
+<!--    <div class="col-3">-->
+
+
+<!--        <div class="nav flex-column nav-pills pt-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">-->
+<!--            <a class="nav-link active" href="/admin" sec:authorize="hasAuthority('ADMIN')" role="tab"-->
+<!--               aria-controls="v-pills-home" aria-selected="true">Admin</a>-->
+<!--            <a class="nav-link" href="/user" sec:authorize="(hasAnyAuthority('ADMIN', 'USER'))" role="tab"-->
+<!--               aria-controls="v-pills-profile" aria-selected="false">User</a>-->
+<!--        </div>-->
+
+<!--    </div>-->
+
+<!--         &lt;!&ndash;    ПРАВЫЙ БОРТ&ndash;&gt;-->
+
+<!--    <div class="col-9 bg-light">-->
+<!--        <h1>Admin panel</h1>-->
+
+<!--        &lt;!&ndash; ПАНЕЛЬ НАВИГАЦИИ &ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="card">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="card-header">&ndash;&gt;-->
+<!--&lt;!&ndash;                <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <li class="nav-item" role="presentation">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab"&ndash;&gt;-->
+<!--&lt;!&ndash;                           aria-controls="home" aria-selected="true">Users table</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <li class="nav-item" role="presentation">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab"&ndash;&gt;-->
+<!--&lt;!&ndash;                           aria-controls="profile" aria-selected="false">New users</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                </ul>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+
+<!--        <ul class="nav nav-tabs">-->
+<!--            &lt;!&ndash; User table &ndash;&gt;-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link active" data-toggle="tab" aria-current="page" href="#user-table" id="navTabUT">Users table</a>-->
+<!--            </li>-->
+<!--            &lt;!&ndash; New user &ndash;&gt;-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" data-toggle="tab" href="#new-user" id="navTabNU">New user</a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--        -->
+<!--        -->
+<!--        <ul class="nav nav-tabs">-->
+
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link active">Users table</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item" id="newUserLink">-->
+
+<!--            </li>-->
+
+<!--            <li class="nav nav-item" id="formNewUser">-->
+
+<!--                <a class="nav-link" type="button" id="SliderNewUserForm">New user</a>-->
+<!--                <div class="col-md-10" style="align-items: center">-->
+<!--                    <div class="container-fluid" align="center">-->
+<!--                        <div class="d-flex justify-content-center">-->
+<!--                            <div class="form-group">-->
+<!--                                <form id="defaultSomeForm" data-hidden=true style="display: none">-->
+<!--                                    <h4>Add new User</h4>-->
+<!--                                    <input  id="AddNewUserFirstName" type="text" placeholder="name">-->
+<!--                                    <input  id="AddNewUserLastName" type="text" placeholder="lastName">-->
+<!--                                    <input class="form-control" id="AddNewUserAge" type="number" placeholder="age">-->
+<!--                                    <input class="form-control" id="AddNewUserEmail" type="text" placeholder="email">-->
+<!--                                    <input class="form-control" id="AddNewUserPassword" type="password" placeholder="password">-->
+<!--                                    <select class="custom-select"-->
+<!--                                            size="3"-->
+<!--                                            multiple name="roles"-->
+<!--                                            id="AddNewUserRoles" required>-->
+<!--                                        <option value="1">ADMIN</option>-->
+<!--                                        <option value="2">USER</option>-->
+<!--                                    </select>-->
+<!--                                    <br>-->
+
+<!--                                    <button class="btn btn-primary mb-2" type="button" id="addNewUserButton">Add new user</button>-->
+<!--                                </form>-->
+
+<!--                            </div>-->
+
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </li>-->
+
+<!--        </ul>-->
+
+
+
+<!--            <div class="card-body">-->
+<!--                <div class="tab-content" id="myTabContent">-->
+<!--                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">-->
+<!--                        <div class="card-header">-->
+<!--                            <div class="m-1">-->
+<!--                                <h4>All users</h4>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                        <table class="table table-hover" style="background-color: white" id="tableUsersForAdmin">-->
+<!--                            &lt;!&ndash;Шапка таблицы&ndash;&gt;-->
+<!--                            <thead>-->
+
+<!--                            <tr>-->
+<!--                                <th style="text-align: center;"> ID</th>-->
+<!--                                <th style="text-align: center;"> First Name</th>-->
+<!--                                <th style="text-align: center;"> Last Name</th>-->
+<!--                                <th style="text-align: center;"> Age</th>-->
+<!--                                <th style="text-align: center;"> Email</th>-->
+<!--                                <th style="text-align: center;"> Role</th>-->
+<!--                                <th style="text-align: center;"> Edit</th>-->
+<!--                                <th style="text-align: center;"> Delete</th>-->
+<!--                            </tr>-->
+<!--                            </thead>-->
+<!--                            &lt;!&ndash;Тело таблицы&ndash;&gt;-->
+
+<!--                            <tbody id="data">-->
+
+<!--                            </tbody>-->
+<!--                        </table>-->
+
+<!--                        &lt;!&ndash;Модальное окно &ndash;&gt;-->
+<!--                        <div class="modal fade" id="someDefaultModal" tabindex="-1" role="dialog" aria-labelledby="someDefaultModalLabel"-->
+<!--                             aria-hidden="true">-->
+<!--                            <div class="modal-dialog">-->
+<!--                                <div class="modal-content">-->
+
+<!--                                    <div class="modal-header">-->
+<!--                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>-->
+<!--                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                                            <span aria-hidden="true">&times;</span>-->
+<!--                                        </button>-->
+<!--                                    </div>-->
+
+<!--                                    <div class="modal-body">-->
+<!--                                    </div>-->
+
+<!--                                    <div class="modal-footer">-->
+<!--                                    </div>-->
+
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--&lt;!&ndash;                        <table class="table table-striped">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <th scope="col">Id</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <th scope="col">First name</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <th scope="col">Last name</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <th scope="col">Age</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <th scope="col">Email</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <th scope="col">Role</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <th scope="col">Edit</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <th scope="col">Delete</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <tr th:each="user : ${allUsers}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <td th:text="${user.getId()}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <td th:text="${user.getName()}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <td th:text="${user.getLastName()}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <td th:text="${user.getAge()}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <td th:text="${user.getEmail()}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <td th:each="role : ${user.getRoles()}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <th:block th:text="${role.getName()}"></th:block>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <td>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                    &lt;!&ndash; Кнопка-триггер модального окна &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"&ndash;&gt;-->
+<!--&lt;!&ndash;                                            th:attr="data-bs-target=${'#editModal' + user.id}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        edit&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </button>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                    &lt;!&ndash; Модальное окно &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <div class="modal fade" th:each="user : ${allUsers}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                         th:attr="id=${'editModal' + user.id}" tabindex="-1"&ndash;&gt;-->
+<!--&lt;!&ndash;                                         aria-labelledby="exampleModalLabel" aria-hidden="true">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <div class="modal-dialog">&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <div class="modal-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                <div class="modal-header">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            aria-label="Закрыть"></button>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                <div class="modal-body">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                    <form action="#" th:method="PATCH" th:object="${userGet}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                          th:action="@{/admin/{id}(id=${user.getId()})}">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <label for="userId" class="center-block"><span&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                        class="font-weight-bold"><strong>ID</strong></span></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       class="form-control collection-ville text-center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       id="userId" name="id" th:value="${user.getId()}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       th:name="id" readonly="readonly">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <label for="userName2" class="center-block"><span&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                        class="font-weight-bold"><strong>First name</strong></span></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       class="form-control collection-ville text-center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       id="userName2" name="name"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       th:value="${user.getUsername()}" th:name="name">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <label for="userName3" class="center-block"><span&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                        class="font-weight-bold"><strong>Last name</strong></span></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       class="form-control collection-ville text-center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       id="userName3" name="lastName"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       th:value="${user.getLastName()}" th:name="lastName">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <label for="userAge" class="center-block"><span&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                        class="font-weight-bold"><strong>Age</strong></span></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <input type="number"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       class="form-control collection-ville text-center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       id="userAge" name="age"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       th:value="${user.getAge()}" th:name="age">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <label for="userEmail" class="center-block"><span&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                        class="font-weight-bold"><strong>Email</strong></span></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       class="form-control collection-ville text-center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       id="userEmail" name="email"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       th:value="${user.getEmail()}" th:name="email">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <label for="userPassword" class="center-block"><span&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                        class="font-weight-bold"><strong>Password</strong></span></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       class="form-control collection-ville text-center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       id="userPassword" name="password"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       th:name="password">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <label for="exampleFormControlSelect2"><b>Role</b></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <select multiple class="form-control form-control-sm" id="exampleFormControlSelect2" size="2" th:name="roles">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <option value="1">ADMIN</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <option value="2" selected>USER</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </select>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="modal-footer">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <button type="button" class="btn btn-secondary"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                    data-bs-dismiss="modal">Close&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </button>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <button type="submit" class="btn btn-primary">Edit&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </button>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    </form>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <td>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                    &lt;!&ndash; Кнопка-триггер модального окна &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"&ndash;&gt;-->
+<!--&lt;!&ndash;                                            th:attr="data-bs-target=${'#deleteModal' + user.id}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        delete&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </button>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                    &lt;!&ndash; Модальное окно &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <div class="modal fade" th:each="user : ${allUsers}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                         th:attr="id=${'deleteModal' + user.id}" tabindex="-1"&ndash;&gt;-->
+<!--&lt;!&ndash;                                         aria-labelledby="exampleModalLabel" aria-hidden="true">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <div class="modal-dialog">&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <div class="modal-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                <div class="modal-header">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <h5 class="modal-title" id="exampleModalLabeldel">Delete user</h5>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            aria-label="Закрыть"></button>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                <div class="modal-body">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                    <form action="#" th:method="DELETE" th:object="${userGet}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                          th:action="@{/admin/{id}(id=${user.getId()})}">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <label for="userIddel" class="center-block"><span&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                        class="font-weight-bold"><strong>ID</strong></span></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       class="form-control collection-ville text-center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       id="userIddel" name="id"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       th:value="${user.getId()}" th:name="id"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       readonly="readonly">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <label for="userNamedele" class="center-block"><span&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                        class="font-weight-bold"><strong>First name</strong></span></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       class="form-control collection-ville text-center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       id="userNamedele" name="name"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       th:value="${user.getUsername()}" th:name="name"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       readonly="readonly">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <label for="userNameDel" class="center-block"><span&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                        class="font-weight-bold"><strong>Last name</strong></span></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       class="form-control collection-ville text-center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       id="userNameDel" name="lastname"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       th:value="${user.getLastName()}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       th:name="lastname" readonly="readonly">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <label for="userAgedel" class="center-block"><span&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                        class="font-weight-bold"><strong>Age</strong></span></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       class="form-control collection-ville text-center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                          id="userAgedel" name="age"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                          th:value="${user.getAge()}" th:name="age"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       readonly="readonly">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <label for="userEmaildel" class="center-block"><span&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                        class="font-weight-bold"><strong>Email</strong></span></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       class="form-control collection-ville text-center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       id="userEmaildel" name="email"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       th:value="${user.getEmail()}" th:name="email"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       readonly="readonly">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <label for="userPassworddel" class="center-block"><span&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                        class="font-weight-bold"><strong>Password</strong></span></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       class="form-control collection-ville text-center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       id="userPassworddel" name="password"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       th:name="password" readonly="readonly">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <label for="userRoledel" class="center-block"><span&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                        class="font-weight-bold"><strong>Role</strong></span></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                <input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       class="form-control collection-ville text-center"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       id="userRoledel" name="roles"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       th:value="${user.getRoles()}" th:name="roles"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                       readonly="readonly">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                                        <div class="modal-footer">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <button type="button" class="btn btn-secondary"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                    data-bs-dismiss="modal">Close&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </button>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <button type="submit" class="btn btn-primary">Delete&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            </button>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    </form>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;                                </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </table>&ndash;&gt;-->
+<!--                    </div>-->
+
+<!--&lt;!&ndash;                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="card-header">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <div class="m-1">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <h4>Add new user</h4>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        <form th:action="@{/admin}" th:object="${newUser}" method="POST">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <div class="form-group row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="col-sm-3 text-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <label><strong>First name</strong></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <br/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <input type="text" th:field="*{name}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <div class="form-group row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="col-sm-3 text-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <label><strong>Last name</strong></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <br/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <input type="text" th:field="*{lastName}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <div class="form-group row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="col-sm-3 text-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <label><strong>Age</strong></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <br/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <input type="number" th:field="*{age}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <div class="form-group row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="col-sm-3 text-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <label><strong>Email</strong></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <br/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <input type="text" th:field="*{email}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <div class="form-group row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="col-sm-3 text-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <label><strong>Password</strong></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <br/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <input type="text" th:field="*{password}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <div class="form-group text-center row justify-content-center align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="col-sm-3 text-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <label for="Select2"><b>Role</b></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <select multiple class="form-control form-control-sm" id="Select2" size="2" th:field="*{roles}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <option value="1">ADMIN</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <option value="2" selected>USER</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </select>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <br/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <div class="d-grid gap-2 col-4 mx-auto">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <button class="btn btn-success" type="submit">Add new user</button>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </form>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--                </div>-->
+
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--&lt;!&ndash;<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"&ndash;&gt;-->
+<!--&lt;!&ndash;        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"&ndash;&gt;-->
+<!--&lt;!&ndash;        crossorigin="anonymous"></script>&ndash;&gt;-->
+<!--&lt;!&ndash;<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"&ndash;&gt;-->
+<!--&lt;!&ndash;        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"&ndash;&gt;-->
+<!--&lt;!&ndash;        crossorigin="anonymous"></script>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"&ndash;&gt;-->
+<!--&lt;!&ndash;        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"&ndash;&gt;-->
+<!--&lt;!&ndash;        crossorigin="anonymous"></script>&ndash;&gt;-->
+<!--&lt;!&ndash;<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"&ndash;&gt;-->
+<!--&lt;!&ndash;        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"&ndash;&gt;-->
+<!--&lt;!&ndash;        crossorigin="anonymous"></script>&ndash;&gt;-->
+
+<!--                    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"-->
+<!--                            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"-->
+<!--                            crossorigin="anonymous"></script>-->
+<!--                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"-->
+<!--                            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"-->
+<!--                            crossorigin="anonymous"></script>-->
+<!--                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"-->
+<!--                            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"-->
+<!--                            crossorigin="anonymous"></script>-->
+
+<!--<script src="/app.js"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title >Admin panel</title>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid bg-dark" >
+        <div class="row gx-5">
+            <div class="navbar-brand" style="color: white" id="barEmail">
+                <span>Email</span>
+            </div>
+            <div class="navbar-text ml-2" style="color: white" >with roles:</div>
+            <div class="navbar-text ml-2" style="color: white" id="barRoles">
+                <span>roles</span>
+            </div>
+        </div>
+        <a href="/logout" class="link-light">logout</a>
+    </div>
+</nav>
+<!-- all -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="nav flex-column nav-pills pt-4 col-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link active" href="/admin" authorize="hasAuthority('ADMIN')" role="tab"
+               aria-controls="v-pills-home" aria-selected="true">Admin</a>
+            <a class="nav-link" href="/user" authorize="(hasAnyAuthority('ADMIN', 'USER'))" role="tab"
+               aria-controls="v-pills-profile" aria-selected="false">User</a>
+        </div>
+        <div class="col-10" style="background-color: lightgrey">
+            <div class="tab-content">
+                <div class="tab-pane active" id="admin">
+                    <h1>Admin panel</h1>
+                    <ul class="nav nav-tabs">
+                        <!-- User table -->
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" aria-current="page" href="#user-table" id="navTabUT">Users table</a>
+                        </li>
+                        <!-- New user -->
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#new-user" id="navTabNU">New user</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="user-table">
+                            <div class="card">
+                                <div class="card-header">
+                                    All users
+                                </div>
+                                <!-- Table -->
+                                <table class="table table-striped" id="users">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>First name</th>
+                                        <th>Last name</th>
+                                        <th>Age</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!--Модальное окно для редактирования-->
+                        <div class="modal fade" id="edit">
+                            <div class="modal-dialog">
+                                <div class="modal-content justify-content-center">
+                                    <div class="modal-header text-center">
+                                        <h4 class="modal-title text-center">Edit user</h4>
+                                        <button class="close" data-dismiss="modal">x</button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <div class="container">
+                                            <div class="row justify-content-md-center">
+                                                <div class="col-6">
+                                                    <form id="editForm">
+                                                        <div id="editDiv1"></div>
+                                                        <div id="editDiv2"></div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer" id="editBut">
+                                        <!--                                        <button class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                                        <!--                                        <button type="button" class="btn btn-primary" form="editForm">Edit</button>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Конец модального окна для добавления-->
+                        <!-- Модальное окно удаления  -->
+                        <div class="modal fade" id="delete">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Delete user</h4>
+                                        <button class="close" data-dismiss="modal">x</button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <div class="container">
+                                            <div class="row justify-content-md-center">
+                                                <div class="col-6">
+                                                    <form id="deleteForm">
+                                                        <div id="deleteDiv1"></div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer" id="footer"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Конец окна удаления -->
+                        <div class="tab-pane" id="new-user">
+                            <div class="card">
+                                <div class="card-header">
+                                    Add new user
+                                </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-4"></div>
+                                        <div class="col-4 text-center" >
+                                            <form id="formNewUser" name="formNewUser">
+                                                <div class="form-group">
+                                                    <label for="name">First name</label>
+                                                    <input type="text" class="form-control" name="firstnameNew" id="name" placeholder="First name" >
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="lastName">Last name</label>
+                                                    <input type="text" class="form-control" name="lastnameNew" id="lastName" placeholder="Last name" >
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="age">Age</label>
+                                                    <input type="number" class="form-control" name="ageNew" id="age" placeholder="Age" >
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="email">Email</label>
+                                                    <input type="email" class="form-control" name="emailNew" id="email" placeholder="Email" >
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="Password">Password</label>
+                                                    <input type="password" class="form-control" name="passwordNew" id="password" placeholder="Password" >
+                                                </div>
+                                                <div class="form-group" id="rolesNewUser"></div>
+                                                <button type="button" class="btn btn-success" onclick="addNewUser();">Add new user</button>
+                                            </form>
+                                        </div>
+                                        <div class="col-4"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="/add.js">
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
